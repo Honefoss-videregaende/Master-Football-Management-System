@@ -4,6 +4,11 @@
 
 The Football Management System is an open-source, educational, and robust application designed for professional-level learning. It is part of a project running at the Hønefoss Upper Secondary School - IT (Norway). This system aims to provide students with hands-on experience in managing football teams, players, and matches.
 
+
+**Disclaimer:**  
+This project is for educational purposes only and is intended for learning and development in a classroom environment. The system is not intended for commercial use, and while every effort is made to ensure the correctness and quality of the code, users should verify and test the system for their own purposes before any practical use. The authors do not assume responsibility for any damages or issues that may arise from using this system.
+
+
 ## Features
 
 - Manage football teams and players
