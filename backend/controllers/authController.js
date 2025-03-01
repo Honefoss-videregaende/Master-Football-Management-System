@@ -1,4 +1,19 @@
+const { body, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const authService = require('../services/authService');
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+
+/**
+ * Rate limiter for login attempts to prevent brute force attacks.
+ */
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit to 5 attempts per window
+    message: 'Too many login attempts, please try again later'
+});
 
 /**
  * Auth Controller
@@ -11,11 +26,47 @@ class AuthController {
      * @param {Object} res - The response object.
      */
     async register(req, res) {
+        await body('username')
+            .isAlphanumeric().withMessage('Username should only contain letters and numbers')
+            .trim()
+            .escape()
+            .notEmpty().withMessage('Username is required')
+            .run(req);
+
+        await body('email')
+            .isEmail().withMessage('Invalid email format')
+            .normalizeEmail()
+            .run(req);
+
+        await body('password')
+            .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })
+            .withMessage('Password must be at least 8 characters and include uppercase, lowercase, number, and symbol')
+            .run(req);
+
+        await body('roleId')
+            .isInt().withMessage('Role ID must be an integer')
+            .toInt()
+            .run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         try {
-            const user = await authService.register(req.body);
-            res.status(201).json(user);
+            const { username, email, password, roleId } = req.body;
+            const existingUser = await User.findOne({ where: { email } });
+            if (existingUser) {
+                return res.status(400).json({ message: 'User already exists' });
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+            const newUser = await User.create({ username, email, passwordHash, roleId });
+
+            res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error(error);
+            res.status(500).json({ message: 'Server error' });
         }
     }
 
@@ -25,11 +76,31 @@ class AuthController {
      * @param {Object} res - The response object.
      */
     async login(req, res) {
+        await body('email').isEmail().normalizeEmail().run(req);
+        await body('password').isLength({ min: 6 }).run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         try {
-            const token = await authService.login(req.body);
+            const { email, password } = req.body;
+            const user = await User.findOne({ where: { email } });
+            if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+                return res.status(400).json({ message: 'Invalid email or password' });
+            }
+
+            const token = jwt.sign(
+                { userId: user.id, role: user.roleId },
+                process.env.JWT_SECRET,
+                { algorithm: 'HS256', expiresIn: '15m' }
+            );
+
             res.status(200).json({ token });
         } catch (error) {
-            res.status(401).json({ error: error.message });
+            console.error(error);
+            res.status(500).json({ message: 'Server error' });
         }
     }
 
@@ -58,6 +129,31 @@ class AuthController {
             res.status(200).json({ token });
         } catch (error) {
             res.status(401).json({ error: error.message });
+        }
+    }
+
+    /**
+     * Protected route.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
+    protected(req, res) {
+        try {
+            const authHeader = req.headers.authorization;
+            if (!authHeader) {
+                return res.status(401).json({ message: 'Access denied. No token provided.' });
+            }
+
+            const token = authHeader.split(' ')[1];
+            if (!token) {
+                return res.status(401).json({ message: 'Access denied. Invalid token format.' });
+            }
+
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            res.status(200).json({ message: 'Protected route accessed', userId: decoded.userId });
+        } catch (error) {
+            console.error('Token verification error:', error);
+            res.status(400).json({ message: 'Invalid token' });
         }
     }
 }

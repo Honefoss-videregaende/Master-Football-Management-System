@@ -34,10 +34,7 @@ router.post('/login', [
     authController.login(req, res);
 });
 
-// Route to reset password
-router.post('/reset-password', authController.resetPassword);
-
-// Route to refresh token
-router.post('/refresh-token', authController.refreshToken);
+// Protected route
+router.get('/protected', authController.protected);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
+const bcrypt = require('bcrypt');
 
 /**
  * User Model
@@ -88,5 +89,10 @@ const User = sequelize.define('User', {
         },
     ],
 });
+
+// Add the comparePassword method to the User model
+User.prototype.comparePassword = async function (password) {
+    return bcrypt.compare(password, this.passwordHash);
+};
 
 module.exports = User;
