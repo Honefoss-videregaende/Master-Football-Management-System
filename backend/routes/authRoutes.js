@@ -1,7 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const authController = require('../controllers/authController');
-const rateLimiter = require('../middleware/rateLimiter');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
 
 const router = express.Router();
 

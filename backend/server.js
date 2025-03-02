@@ -4,8 +4,12 @@ const authRoutes = require('./routes/authRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const logger = require('./middlewares/logger');
+const rateLimiter = require('./middlewares/rateLimiter');
 
 const app = express();
+
+// Apply rate limiting middleware globally
+app.use(rateLimiter);
 
 // Middleware to log incoming requests
 app.use(logger);
