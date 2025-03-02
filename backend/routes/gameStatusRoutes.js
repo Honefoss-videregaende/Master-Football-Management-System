@@ -2,20 +2,26 @@
 const express = require('express');
 const router = express.Router();
 const gameStatusController = require('../controllers/gameStatusController');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
+
+/**
+ * GameStatus Routes
+ * Defines the routes for game status-related operations.
+ */
 
 // Create a new game status
-router.post('/statuses', gameStatusController.createStatus);
+router.post('/statuses', rateLimiter, gameStatusController.createStatus);
 
 // Update an existing game status
-router.put('/statuses/:statusId', gameStatusController.updateStatus);
+router.put('/statuses/:statusId', rateLimiter, gameStatusController.updateStatus);
 
 // Delete a game status
-router.delete('/statuses/:statusId', gameStatusController.deleteStatus);
+router.delete('/statuses/:statusId', rateLimiter, gameStatusController.deleteStatus);
 
 // Get a game status by its ID
-router.get('/statuses/:statusId', gameStatusController.getStatusById);
+router.get('/statuses/:statusId', rateLimiter, gameStatusController.getStatusById);
 
 // Get a game status by its name
-router.get('/statuses/name/:statusName', gameStatusController.getStatusByName);
+router.get('/statuses/name/:statusName', rateLimiter, gameStatusController.getStatusByName);
 
 module.exports = router;

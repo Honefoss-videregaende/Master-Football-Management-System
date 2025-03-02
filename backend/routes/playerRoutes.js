@@ -1,5 +1,6 @@
 const express = require('express');
 const playerController = require('../controllers/playerController');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
 
 const router = express.Router();
 
@@ -9,18 +10,18 @@ const router = express.Router();
  */
 
 // Route to create a new player
-router.post('/players', playerController.createPlayer);
+router.post('/players', rateLimiter, playerController.createPlayer);
 
 // Route to get a player by its ID
-router.get('/players/:playerId', playerController.getPlayerById);
+router.get('/players/:playerId', rateLimiter, playerController.getPlayerById);
 
 // Route to get all players
-router.get('/players', playerController.getAllPlayers);
+router.get('/players', rateLimiter, playerController.getAllPlayers);
 
 // Route to update a player by its ID
-router.put('/players/:playerId', playerController.updatePlayer);
+router.put('/players/:playerId', rateLimiter, playerController.updatePlayer);
 
 // Route to delete a player by its ID
-router.delete('/players/:playerId', playerController.deletePlayer);
+router.delete('/players/:playerId', rateLimiter, playerController.deletePlayer);
 
 module.exports = router;

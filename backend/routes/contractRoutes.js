@@ -1,5 +1,6 @@
 const express = require('express');
 const contractController = require('../controllers/contractController');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
 
 const router = express.Router();
 
@@ -9,18 +10,18 @@ const router = express.Router();
  */
 
 // Route to create a new contract
-router.post('/contracts', contractController.createContract);
+router.post('/contracts', rateLimiter, contractController.createContract);
 
 // Route to get a contract by its ID
-router.get('/contracts/:contractId', contractController.getContractById);
+router.get('/contracts/:contractId', rateLimiter, contractController.getContractById);
 
 // Route to get all contracts
-router.get('/contracts', contractController.getAllContracts);
+router.get('/contracts', rateLimiter, contractController.getAllContracts);
 
 // Route to update a contract by its ID
-router.put('/contracts/:contractId', contractController.updateContract);
+router.put('/contracts/:contractId', rateLimiter, contractController.updateContract);
 
 // Route to delete a contract by its ID
-router.delete('/contracts/:contractId', contractController.deleteContract);
+router.delete('/contracts/:contractId', rateLimiter, contractController.deleteContract);
 
 module.exports = router;

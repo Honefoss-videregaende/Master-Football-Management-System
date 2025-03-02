@@ -1,5 +1,6 @@
 const express = require('express');
 const playerStatisticsController = require('../controllers/playerStatisticsController');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
 
 const router = express.Router();
 
@@ -9,18 +10,18 @@ const router = express.Router();
  */
 
 // Route to create new player statistics
-router.post('/playerStatistics', playerStatisticsController.createPlayerStatistics);
+router.post('/playerStatistics', rateLimiter, playerStatisticsController.createPlayerStatistics);
 
 // Route to get player statistics by its ID
-router.get('/playerStatistics/:statisticId', playerStatisticsController.getPlayerStatisticsById);
+router.get('/playerStatistics/:statisticId', rateLimiter, playerStatisticsController.getPlayerStatisticsById);
 
 // Route to get all player statistics
-router.get('/playerStatistics', playerStatisticsController.getAllPlayerStatistics);
+router.get('/playerStatistics', rateLimiter, playerStatisticsController.getAllPlayerStatistics);
 
 // Route to update player statistics by its ID
-router.put('/playerStatistics/:statisticId', playerStatisticsController.updatePlayerStatistics);
+router.put('/playerStatistics/:statisticId', rateLimiter, playerStatisticsController.updatePlayerStatistics);
 
 // Route to delete player statistics by its ID
-router.delete('/playerStatistics/:statisticId', playerStatisticsController.deletePlayerStatistics);
+router.delete('/playerStatistics/:statisticId', rateLimiter, playerStatisticsController.deletePlayerStatistics);
 
 module.exports = router;

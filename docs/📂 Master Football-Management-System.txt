@@ -1,4 +1,4 @@
-📂 Football-Management-System/
+📂 Master-Football-Management-System/
 ├───assets
 │   ├───fonts
 │   ├───icons

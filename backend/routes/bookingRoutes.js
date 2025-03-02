@@ -1,5 +1,6 @@
 const express = require('express');
 const bookingController = require('../controllers/bookingController');
+const rateLimiter = require('../middlewares/rateLimiter'); // Ensure this path is correct
 
 const router = express.Router();
 
@@ -9,18 +10,18 @@ const router = express.Router();
  */
 
 // Route to create a new booking
-router.post('/bookings', bookingController.createBooking);
+router.post('/bookings', rateLimiter, bookingController.createBooking);
 
 // Route to get a booking by its ID
-router.get('/bookings/:bookingId', bookingController.getBookingById);
+router.get('/bookings/:bookingId', rateLimiter, bookingController.getBookingById);
 
 // Route to get all bookings
-router.get('/bookings', bookingController.getAllBookings);
+router.get('/bookings', rateLimiter, bookingController.getAllBookings);
 
 // Route to update a booking by its ID
-router.put('/bookings/:bookingId', bookingController.updateBooking);
+router.put('/bookings/:bookingId', rateLimiter, bookingController.updateBooking);
 
 // Route to delete a booking by its ID
-router.delete('/bookings/:bookingId', bookingController.deleteBooking);
+router.delete('/bookings/:bookingId', rateLimiter, bookingController.deleteBooking);
 
 module.exports = router;
