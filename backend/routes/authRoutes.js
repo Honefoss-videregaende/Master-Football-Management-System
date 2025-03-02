@@ -1,6 +1,7 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const authController = require('../controllers/authController');
+const rateLimiter = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
  */
 
 // Route to register a new user with validation
-router.post('/register', [
+router.post('/register', rateLimiter, [
     check('username').notEmpty().withMessage('Username is required'),
     check('email').isEmail().withMessage('Please enter a valid email address'),
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
@@ -23,7 +24,7 @@ router.post('/register', [
 });
 
 // Route to login a user with validation
-router.post('/login', [
+router.post('/login', rateLimiter, [
     check('email').isEmail().withMessage('Please enter a valid email address'),
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ], (req, res) => {
@@ -35,6 +36,6 @@ router.post('/login', [
 });
 
 // Protected route
-router.get('/protected', authController.protected);
+router.get('/protected', rateLimiter, authController.protected);
 
 module.exports = router;
