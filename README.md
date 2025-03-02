@@ -3,157 +3,169 @@
 
 ## Overview
 
-The Football Management System is an open-source, educational, and robust application designed for professional-level learning. It is part of a project running at the Hønefoss Upper Secondary School - IT (Norway). This system aims to provide students with hands-on experience in managing football teams, players, and matches.
+The **Master Football Management System** is an open-source, educational web application designed to help students and developers practice managing football teams, players, games, and competitions. Developed as part of the **Information Technology program at Hønefoss Upper Secondary School in Norway**, the system offers hands-on experience in building a football management solution.
 
+This project is actively under development, and new features and improvements are continuously added. The development process benefits from tools like GitHub Copilot, ensuring efficient coding and high-quality development practices.
 
-**Disclaimer:**  
-This project is for educational purposes only and is intended for learning and development in a classroom environment. The system is not intended for commercial use, and while every effort is made to ensure the correctness and quality of the code, users should verify and test the system for their own purposes before any practical use. The authors do not assume responsibility for any damages or issues that may arise from using this system.
-
+**Disclaimer:**\
+This project is intended for educational use only. While every effort is made to ensure the correctness and quality of the code, users should test the system thoroughly before implementing it in real-world scenarios. The authors are not liable for any issues or damages arising from its use.
 
 ## Features
 
-- Manage football teams and players
-- Schedule and manage matches
-- Track player statistics and performance
-- User authentication and authorization
-- Responsive design for both desktop and mobile devices
+- Manage football teams, players, and matches.
+- Track player statistics and performance.
+- Schedule and manage competitions and games.
+- User authentication and role-based access control.
+- Responsive design for desktop and mobile devices.
 
 ## Tech Stack
 
 ### Backend
-- Node.js
-- Express.js
-- MySQL
-- Sequelize (ORM)
-- JWT
+
+- **Node.js** and **Express.js** for server-side development.
+- **MySQL** database with **Sequelize ORM** for data management.
+- **JWT** for user authentication.
 
 ### Frontend
-- React.js (functional components with hooks)
-- Axios
-- React Router
+
+- **React.js** (Functional components with Hooks) for building interactive user interfaces.
+- **Axios** for API requests.
+- **React Router** for seamless navigation.
 
 ### Styling
-- Bootstrap for simplicity and responsiveness
+
+- **Bootstrap** for fast, responsive design.
 
 ### Testing
-- Jest (backend)
-- React Testing Library (frontend)
+
+- **Jest** for backend testing.
+- **React Testing Library** for frontend testing.
 
 ### Deployment
-- Docker (optional)
-- Heroku (backend)
-- Netlify (frontend)
+
+- **Docker** (optional) for containerized development.
+- **Heroku** (for backend).
+- **Netlify** (for frontend).
 
 ### Version Control
-- Git
-- GitHub/GitLab/Bitbucket
+
+- **Git** for version control, hosted on platforms like **GitHub**, **GitLab**, or **Bitbucket**.
 
 ## Installation
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-- MySQL or any other SQL database
+Before you start, make sure you have the following installed:
+
+- **Node.js** (v14 or higher).
+- **npm** (v6 or higher).
+- **MySQL** (or another SQL database).
 
 ### Clone the Repository
+
+To get started, clone the repository and navigate to the project directory:
 
 ```sh
 git clone https://github.com/Honefoss-videregaende/Master-Football-Management-System.git
 cd Master-Football-Management-System
 ```
+
 ### Backend Setup
-- Navigate to the backend directory:
+
+1. Navigate to the **backend** directory:
+
 ```sh
 cd backend
 ```
-- Install the dependencies:
+
+2. Install dependencies:
+
 ```sh
 npm install
 ```
-- Create a .env file in the backend directory and add the following environment variables:
 
-```markdown
+3. Create a `.env` file in the **backend** directory and configure your environment variables:
+
+```ini
 DB_NAME=your_database_name
 DB_USER=your_database_user
 DB_PASS=your_database_password
 DB_HOST=localhost
 JWT_SECRET=your_jwt_secret
 ```
-- Run the database migrations:
+
+4. Ensure that **MySQL** is running and the database is created before running migrations:
+
 ```sh
 npx sequelize-cli db:migrate
 ```
-- Start the backend server:
+
+5. Start the backend server:
+
 ```sh
 npm start
 ```
+
 ### Frontend Setup
-- Navigate to the frontend directory:
+
+1. Navigate to the **frontend** directory:
+
 ```sh
 cd ../frontend
 ```
-- Install the dependencies:
+
+2. Install dependencies:
+
 ```sh
 npm install
 ```
-- Start the frontend development server:
+
+3. Start the frontend development server:
+
 ```sh
 npm start
 ```
+
 ### Usage
 
-- Open your browser and navigate to http://localhost:3000 to access the frontend.
-- Use the provided credentials to log in and start managing football teams and matches.
+Once both the backend and frontend servers are running, you can access the application by opening your browser and going to [http://localhost:3000](http://localhost:3000).
 
-### Contributing
-We welcome contributions from the community. If you would like to contribute, please follow these steps:
+Use the provided credentials to log in and start managing football teams, players, and games.
 
-- Fork the repository.
-- Create a new branch for your feature or bug fix:
+## Contributing
+
+We welcome contributions from the community! Here's how you can contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix:
+
 ```sh
 git checkout -b feature-name
 ```
-- Commit your changes:
+
+3. Commit your changes:
+
 ```sh
 git commit -m "Description of your changes"
 ```
-- Push to the branch:
+
+4. Push your changes:
+
 ```sh
 git push origin feature-name
 ```
-- Create a pull request.
 
-### License
-This project is licensed under the Apache-2.0 license. See the LICENSE file for more details.
-
-### Acknowledgements
-This project is part of an educational initiative at the Hønefoss Upper Secondary School - IT (Norway). We would like to thank all the students and teachers who contributed to this project.
-
-### Contact
-For any questions or inquiries, please contact us at kamranhaz"bfk.no.
+5. Open a pull request to the main repository.
 
 
+## License
 
+This project is licensed under the **Apache-2.0** license. See the [LICENSE](LICENSE) file for more details.
 
+## Acknowledgements
 
+This project is part of the educational initiative at **Hønefoss Upper Secondary School's Information Technology program**. We thank all contributors who improve and expand this project, students, teachers/educators, and community members alike.
 
+## Contact
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+For any questions or inquiries, please contact us at **[kamranhaz@bfk.no](mailto\:kamranhaz@bfk.no)**.
