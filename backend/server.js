@@ -1,4 +1,5 @@
 require('dotenv').config(); // Load environment variables from .env file
+require('express-async-errors'); // Handle async errors
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -6,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const logger = require('./middlewares/logger');
+const requestLogger = require('./middlewares/requestLogger');
 const rateLimiter = require('./middlewares/rateLimiter');
 
 const app = express();
@@ -13,8 +15,8 @@ const app = express();
 // Apply rate limiting middleware globally
 app.use(rateLimiter);
 
-// Middleware to log incoming requests
-app.use(logger);
+// Middleware to log incoming requests using morgan
+app.use(requestLogger);
 
 // Middleware to parse JSON bodies in incoming requests
 app.use(bodyParser.json());
@@ -41,5 +43,5 @@ const PORT = process.env.PORT || 3000;
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    logger.info(`Server is running on port ${PORT}`);
 });

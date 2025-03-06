@@ -1,4 +1,5 @@
 const { AppError } = require('./customErrors');
+const logger = require('./logger');
 
 /**
  * Error Handler Middleware
@@ -6,7 +7,7 @@ const { AppError } = require('./customErrors');
  */
 const errorHandler = (err, req, res, next) => {
     // Log the error message for debugging purposes
-    console.error(err.message);
+    logger.error(`Error: ${err.message}`);
 
     // Handle custom application errors
     if (err instanceof AppError) {
@@ -19,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
     // Handle generic errors
     res.status(500).json({
         status: 'error',
-        message: 'Something went wrong. Please try again later.'
+        message: 'An unexpected error occurred. Please try again later.'
     });
 };
 

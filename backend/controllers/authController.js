@@ -26,39 +26,21 @@ class AuthController {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    async register(req, res) {
-        await body('username')
-            .isAlphanumeric().withMessage('Username should only contain letters and numbers')
-            .trim()
-            .escape()
-            .notEmpty().withMessage('Username is required')
-            .run(req);
-
-        await body('email')
-            .isEmail().withMessage('Invalid email format')
-            .normalizeEmail()
-            .run(req);
-
-        await body('password')
-            .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })
-            .withMessage('Password must be at least 8 characters and include uppercase, lowercase, number, and symbol')
-            .run(req);
-
-        await body('roleId')
-            .isInt().withMessage('Role ID must be an integer')
-            .toInt()
-            .run(req);
+    async register(req, res, next) {
+        await body('username').isAlphanumeric().trim().escape().notEmpty().run(req);
+        await body('email').isEmail().normalizeEmail().run(req);
+        await body('password').isLength({ min: 6 }).run(req);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return next(new BadRequestError('Invalid input'));
         }
 
         try {
             const { username, email, password, roleId } = req.body;
             const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {
-                return res.status(400).json({ message: 'User already exists' });
+                return next(new BadRequestError('User already exists'));
             }
 
             const passwordHash = await bcrypt.hash(password, 10);
@@ -66,8 +48,10 @@ class AuthController {
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Server error' });
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                return next(new BadRequestError('Username must be unique'));
+            }
+            next(error);
         }
     }
 
