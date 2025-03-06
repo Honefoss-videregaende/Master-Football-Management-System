@@ -4,6 +4,7 @@ const authService = require('../services/authService');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { BadRequestError } = require('../middlewares/customErrors');
 require('dotenv').config();
 
 /**
@@ -75,20 +76,20 @@ class AuthController {
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      */
-    async login(req, res) {
+    async login(req, res, next) {
         await body('email').isEmail().normalizeEmail().run(req);
         await body('password').isLength({ min: 6 }).run(req);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return next(new BadRequestError('Invalid input'));
         }
 
         try {
             const { email, password } = req.body;
             const user = await User.findOne({ where: { email } });
             if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-                return res.status(400).json({ message: 'Invalid email or password' });
+                return next(new BadRequestError('Invalid email or password'));
             }
 
             const token = jwt.sign(
@@ -99,8 +100,7 @@ class AuthController {
 
             res.status(200).json({ token });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Server error' });
+            next(error);
         }
     }
 

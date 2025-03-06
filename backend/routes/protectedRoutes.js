@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(rateLimiter);
 
 router.get('/', authMiddleware, (req, res) => {
-    res.send('This is a protected route. You have access because you provided a valid token.');
+    res.json({ message: 'This is a protected route', user: req.user });
 });
 
 module.exports = router;
