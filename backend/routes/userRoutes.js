@@ -46,4 +46,7 @@ router.delete('/delete/:userId', authMiddleware, [
     param('userId').isInt().withMessage('User ID must be an integer')
 ], validate, UserController.deleteUser);
 
+// Get user profile
+router.get('/profile', authMiddleware, UserController.getUserProfile); // Ensure this line is included
+
 module.exports = router;

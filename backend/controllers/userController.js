@@ -60,9 +60,28 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Handle getting a user's profile.
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ */
+const getUserProfile = async (req, res, next) => {
+    try {
+        const user = req.user; // Assuming user is attached to the request object by the auth middleware
+        res.status(200).json({
+            email: user.email,
+            username: user.username,
+            roleId: user.roleId
+        });
+    } catch (error) {
+        next(error); // Pass errors to the error handler middleware
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     updateUserProfile,
     deleteUser,
+    getUserProfile,
 };

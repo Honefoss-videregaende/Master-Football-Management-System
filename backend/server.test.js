@@ -4,8 +4,7 @@ require('express-async-errors'); // Handle async errors
 const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes'); // Add this line
-const protectedRoutes = require('./routes/protectedRoutes');
+const userRoutes = require('./routes/userRoutes'); // Ensure this line is included
 const errorHandler = require('./middlewares/errorHandler');
 const logger = require('./middlewares/logger');
 const requestLogger = require('./middlewares/requestLogger');
@@ -31,23 +30,9 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 
 // Use the user routes with the '/user' prefix
-app.use('/user', userRoutes); // Add this line
-
-// Use the protected routes with the '/protected' prefix
-app.use('/protected', protectedRoutes);
-
-// Placeholder for defining other routes (if any)
-// Example: app.use('/users', userRoutes);
+app.use('/user', userRoutes); // Ensure this line is included
 
 // Use the error handler middleware
 app.use(errorHandler);
-
-// Set the port for the server to listen on (from environment variables or default to 3000)
-const PORT = process.env.PORT || 3000;
-
-// Start the server and listen on the specified port
-app.listen(PORT, () => {
-    logger.info(`Server is running on port ${PORT}`);
-});
 
 module.exports = app;
